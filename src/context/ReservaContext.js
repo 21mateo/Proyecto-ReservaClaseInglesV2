@@ -1,4 +1,4 @@
-import React, {useState, useEffect, usecallback, useMemo, createContext} from 'react';
+import React, {useState, useEffect, useCallback, useMemo, createContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CLAVE_RESERVAS = '@reserva_ingles';
@@ -61,6 +61,6 @@ const valor = useMemo(
     [cargando, reservas, agregarReserva]
 )
 
-return <ReservasContext.Provider value={valor}>{children}</ReservasContext.Provider>
+return <ReservaContext.Provider value={valor}>{children}</ReservaContext.Provider>
 
 }
