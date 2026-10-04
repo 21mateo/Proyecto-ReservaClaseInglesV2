@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import  useReserva  from "../hooks/useReserva";
 import useResponsive from "../hooks/useResponsive";
 import { colors, radius, spacing, typography, sombra } from "../theme";
 import { formatearPrecio } from "../data/clases";
@@ -18,6 +18,7 @@ import EtiquetaNivel from "../components/EtiquetaNivel";
 
 export default function DetallesClase({ route, navigation }) {
   const insets = useSafeAreaInsets();
+  const { agregarReserva } = useReserva();
   const claseParam = route?.params?.clase;
   const onReservarExitoso = route?.params?.onReservarExitoso;
   const { paddingHorizontal, esTablet } = useResponsive();
@@ -26,43 +27,50 @@ export default function DetallesClase({ route, navigation }) {
   const [claseDetalle, setClaseDetalle] = useState(claseParam);
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
 
+
   if (!claseDetalle) {
     return null;
   }
 
   const handleReservar = () => {
-    if (!horarioSeleccionado) {
-      Alert.alert("Horario requerido", "Por favor selecciona un horario antes de confirmar tu reserva.");
-      return;
-    }
-
-    if (claseDetalle.cupos <= 0) {
-      Alert.alert("Sin cupos", "Lo sentimos, esta clase ya no tiene cupos disponibles.");
-      return;
-    }
-
-    // 1. Restamos un cupo en el estado local de los detalles
-    setClaseDetalle((prev) => ({
-      ...prev,
-      cupos: prev.cupos - 1,
-    }));
-
-    // 2. Ejecutamos la función que viene de ClasesScreen para actualizar la lista principal
-    if (onReservarExitoso) {
-      onReservarExitoso(claseDetalle.id);
-    }
-
+  if (!horarioSeleccionado) {
     Alert.alert(
-      "¡Reserva Exitosa!",
-      `Has reservado la clase "${claseDetalle.titulo}" con ${claseDetalle.profesor.nombre}.\n\nModalidad: ${claseDetalle.modalidad}\nHorario: ${horarioSeleccionado}`,
-      [
-        { 
-          text: "Aceptar", 
-          onPress: () => navigation.goBack() 
-        }
-      ]
+      "Horario requerido",
+      "Por favor selecciona un horario antes de confirmar tu reserva."
     );
-  };
+    return;
+  }
+
+  if (claseDetalle.cupos <= 0) {
+    Alert.alert(
+      "Sin cupos",
+      "Lo sentimos, esta clase ya no tiene cupos disponibles."
+    );
+    return;
+  }
+
+  agregarReserva(claseDetalle, horarioSeleccionado);
+
+  setClaseDetalle((prev) => ({
+    ...prev,
+    cupos: prev.cupos - 1,
+  }));
+
+  if (onReservarExitoso) {
+    onReservarExitoso(claseDetalle.id);
+  }
+
+  Alert.alert(
+    "¡Reserva Exitosa!",
+    `Has reservado la clase "${claseDetalle.titulo}" con ${claseDetalle.profesor.nombre}.\n\nModalidad: ${claseDetalle.modalidad}\nHorario: ${horarioSeleccionado}`,
+    [
+      {
+        text: "Aceptar",
+        onPress: () => navigation.goBack(),
+      },
+    ]
+  );
+};
 
   return (
     <View style={[estilos.pantalla, { paddingTop: insets.top }]}>

@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ClasesStack from './src/navigation/ClasesStack';
+import TabsPrincipales from './src/navigation/TabsPrincipales';
 import { colors } from './src/theme';
 import { ReservaProvider } from './src/context/ReservaContext';
 
@@ -23,7 +23,7 @@ export default function App() {
     <SafeAreaProvider>
       <ReservaProvider>
         <NavigationContainer theme={temaNavigation}>
-          <ClasesStack />
+          <TabsPrincipales />
         </NavigationContainer>
       </ReservaProvider>
 

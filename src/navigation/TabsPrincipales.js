@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import ClasesStack from './ClasesStack';
-import MisReservasScreen from '../screens/MisReservasScreen';
-import PerfilScreen from '../screens/PerfilScreen';
+import MisReservasScreen from '../screens/MisReservasScreens';
+import PerfilScreen from '../screens/PerfilScreens';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +13,7 @@ export default function TabsPrincipales() {
         <Tab.Navigator
           screenOptions={({ route }) => ({
             headerShown: false,
-            tabBarActiveTintColor: '#007AFF',
+            tabBarActiveTintColor: '#4ADE80',
             tabBarInactiveTintColor: '#777',
             tabBarIcon: ({ color, size }) => {
                 let iconName;
