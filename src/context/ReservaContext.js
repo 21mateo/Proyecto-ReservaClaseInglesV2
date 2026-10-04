@@ -56,9 +56,15 @@ export function ReservaProvider({children}) {
     }, []);
 
 
+    const cancelarReserva = useCallback((idReserva) => {
+    setReservas((previas) =>
+        previas.filter((reserva) => reserva.id !== idReserva)
+    );
+}, []);
+
 const valor = useMemo(
-    () => ({cargando, reservas, agregarReserva}),
-    [cargando, reservas, agregarReserva]
+    () => ({cargando, reservas, agregarReserva, cancelarReserva}),
+    [cargando, reservas, agregarReserva, cancelarReserva]
 )
 
 return <ReservaContext.Provider value={valor}>{children}</ReservaContext.Provider>
