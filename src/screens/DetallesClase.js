@@ -49,7 +49,15 @@ export default function DetallesClase({ route, navigation }) {
     return;
   }
 
-  agregarReserva(claseDetalle, horarioSeleccionado);
+  const resultado = agregarReserva(claseDetalle, horarioSeleccionado);
+
+  if (!resultado.ok) {
+    Alert.alert(
+      "No se pudo reservar",
+      resultado.motivo
+    );
+    return;
+  }
 
   setClaseDetalle((prev) => ({
     ...prev,
@@ -75,9 +83,17 @@ export default function DetallesClase({ route, navigation }) {
   return (
     <View style={[estilos.pantalla, { paddingTop: insets.top }]}>
       {/* Botón flotante para regresar */}
-      <Pressable style={estilos.botonRegresar} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={20} color={colors.texto} />
-      </Pressable>
+      <Pressable
+    style={[estilos.botonRegresar, { top: insets.top + 10 }]}
+    onPress={() => navigation.goBack()}
+>
+    <Ionicons
+        name="arrow-back"
+        size={22}
+        color={colors.texto}
+    />
+</Pressable>
+
 
       <ScrollView
         contentContainerStyle={{ paddingBottom: 130 }}

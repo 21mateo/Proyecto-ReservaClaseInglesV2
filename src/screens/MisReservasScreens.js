@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Pressable, Alert,} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import useReserva from '../hooks/useReserva';
@@ -96,7 +89,7 @@ export default function MisReservasScreen() {
                 style={estilos.botonCancelar}
                 onPress={() => handleCancelarReserva(item.id)}
             >
-                <Text style={estilos.textocancelar}>
+                <Text style={estilos.textoCancelar}>
                     Cancelar reserva
                 </Text>
             </Pressable>

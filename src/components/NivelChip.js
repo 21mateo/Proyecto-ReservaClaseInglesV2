@@ -1,37 +1,49 @@
 import React from "react";
-import {Pressable, Text, StyleSheet} from "react-native";
-import {colors, spacing, radius } from "../theme";
+import { Pressable, Text, StyleSheet } from "react-native";
+import { colors, spacing, radius } from "../theme";
 
-export default function NivelChip({etiqueta, activo, onPress}){
-    return(
+export default function NivelChip({ etiqueta, activo, onPress }) {
+    return (
         <Pressable
             onPress={onPress}
-            style = {({pressed})=>[
+            style={({ pressed }) => [
                 style.chip,
                 activo && style.chipActivo,
-                pressed && {opacity:0.7}
+                pressed && { opacity: 0.7 }
             ]}
         >
-            <Text style = {[style.texto, activo && style.textoActivo]}>{etiqueta}</Text>
+            <Text style={[style.texto, activo && style.textoActivo]}>
+                {etiqueta}
+            </Text>
         </Pressable>
-    )
+    );
 }
-
 
 const style = StyleSheet.create({
     chip: {
-        paddingVertical: spacing.sm,
+        paddingVertical: spacing.md,
         paddingHorizontal: spacing.lg,
         borderRadius: radius.full,
         backgroundColor: colors.superficie,
         borderWidth: 1,
         borderColor: colors.borde,
         marginRight: spacing.sm,
+        minHeight: 48,
+        justifyContent: "center",
     },
+
     chipActivo: {
         backgroundColor: colors.primario,
         borderColor: colors.primario,
     },
-    texto: { fontSize: 13, fontWeight: '600', color: colors.textoSuave },
-    textoActivo: { color: '#FFFFFF' },
+
+    texto: {
+        fontSize: 15,
+        fontWeight: "600",
+        color: colors.textoSuave,
+    },
+
+    textoActivo: {
+        color: "#FFFFFF",
+    },
 });

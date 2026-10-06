@@ -60,7 +60,7 @@ export const CLASES = [
 
     cupos: 4,
 
-    horarios: ['Mar 6:00 p.m.', 'Jue 6:00 p.m.', 'Dom 11:00 a.m.'],
+    horarios: ['Mar 6:00 p.m.', 'Vie 5:30 p.m.', 'Dom 11:00 a.m.'],
 
   },
 
