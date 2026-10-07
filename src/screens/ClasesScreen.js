@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
-  Image,
   Pressable,
   StyleSheet,
   TextInput,
@@ -11,43 +10,46 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+
 import EstadoVacio from "../components/EstadoVacio";
-import EtiquetaNivel from "../components/EtiquetaNivel";
 import NivelChip from "../components/NivelChip";
 import Card from "../components/Card";
 import useResponsive from "../hooks/useResponsive";
+import useReserva from "../hooks/useReserva";
 import { colors, radius, spacing, typography } from "../theme";
-import { formatearPrecio, CLASES, NIVELES } from "../data/clases";
+import { CLASES, NIVELES } from "../data/clases";
 
 export default function ClasesScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const { columnas, paddingHorizontal } = useResponsive();
+  const { obtenerCupos } = useReserva();
+
   const [nivel, setNivel] = useState("Todos");
   const [busqueda, setBusqueda] = useState("");
 
-  // Estado propio de las clases, en vez de leer siempre el arreglo fijo importado
-  const [clases, setClases] = useState(CLASES);
-
-  // Esta función se le pasa a DetallesClase para que, al reservar,
-  // actualice también la lista de esta pantalla
-  const handleReservarExitoso = (idReservado) => {
-    setClases((prev) =>
-      prev.map((clase) =>
-        clase.id === idReservado
-          ? { ...clase, cupos: clase.cupos - 1 }
-          : clase
-      )
-    );
-  };
+  const clases = useMemo(() => {
+    return CLASES.map((clase) => ({
+      ...clase,
+      cupos: obtenerCupos(clase.id),
+    }));
+  }, [obtenerCupos]);
 
   const resultados = useMemo(() => {
     const textoBusqueda = busqueda.trim().toLowerCase();
+
     return clases.filter((clase) => {
-      const coincideNivel = nivel === "Todos" || clase.nivel === nivel;
+      const coincideNivel =
+        nivel === "Todos" || clase.nivel === nivel;
+
       const coincideTexto =
         textoBusqueda === "" ||
-        clase.profesor.nombre.toLowerCase().includes(textoBusqueda) ||
-        clase.titulo.toLowerCase().includes(textoBusqueda);
+        clase.profesor.nombre
+          .toLowerCase()
+          .includes(textoBusqueda) ||
+        clase.titulo
+          .toLowerCase()
+          .includes(textoBusqueda);
+
       return coincideNivel && coincideTexto;
     });
   }, [nivel, busqueda, clases]);
@@ -55,8 +57,16 @@ export default function ClasesScreen({ navigation }) {
   return (
     <View style={[style.pantalla, { paddingTop: insets.top + spacing.md }]}>
       <View style={style.buscador}>
-        <Text style={typography.titulo}>Aplicacion para clases de ingles </Text>
-        <Ionicons name="search" size={18} color={colors.textoSuave} />
+        <Text style={typography.titulo}>
+          Aplicacion para clases de ingles
+        </Text>
+
+        <Ionicons
+          name="search"
+          size={18}
+          color={colors.textoSuave}
+        />
+
         <TextInput
           style={style.input}
           placeholder="Buscar por nivel"
@@ -74,6 +84,7 @@ export default function ClasesScreen({ navigation }) {
           />
         )}
       </View>
+
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -88,6 +99,7 @@ export default function ClasesScreen({ navigation }) {
           />
         ))}
       </ScrollView>
+
       <FlatList
         data={resultados}
         keyExtractor={(item) => item.id}
@@ -97,7 +109,6 @@ export default function ClasesScreen({ navigation }) {
             onPress={() =>
               navigation.navigate("DetallesClase", {
                 clase: item,
-                onReservarExitoso: handleReservarExitoso,
               })
             }
           />
@@ -124,7 +135,10 @@ export default function ClasesScreen({ navigation }) {
 }
 
 const style = StyleSheet.create({
-  pantalla: { flex: 1, backgroundColor: colors.fondo },
+  pantalla: {
+    flex: 1,
+    backgroundColor: colors.fondo,
+  },
 
   buscador: {
     flexDirection: "row",
@@ -139,5 +153,10 @@ const style = StyleSheet.create({
     borderColor: colors.borde,
   },
 
-  input: { flex: 1, fontSize: 14, color: colors.texto, paddingVertical: 0 },
+  input: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.texto,
+    paddingVertical: 0,
+  },
 });

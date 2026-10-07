@@ -18,13 +18,15 @@ import EtiquetaNivel from "../components/EtiquetaNivel";
 
 export default function DetallesClase({ route, navigation }) {
   const insets = useSafeAreaInsets();
-  const { agregarReserva } = useReserva();
+  const { agregarReserva, obtenerCupos  } = useReserva();
   const claseParam = route?.params?.clase;
-  const onReservarExitoso = route?.params?.onReservarExitoso;
   const { paddingHorizontal, esTablet } = useResponsive();
 
   // Estado local de la clase para actualizar los cupos en tiempo real en esta vista
-  const [claseDetalle, setClaseDetalle] = useState(claseParam);
+  const claseDetalle = {
+  ...claseParam,
+  cupos: obtenerCupos(claseParam.id),
+  };
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
 
 
@@ -57,15 +59,6 @@ export default function DetallesClase({ route, navigation }) {
       resultado.motivo
     );
     return;
-  }
-
-  setClaseDetalle((prev) => ({
-    ...prev,
-    cupos: prev.cupos - 1,
-  }));
-
-  if (onReservarExitoso) {
-    onReservarExitoso(claseDetalle.id);
   }
 
   Alert.alert(
